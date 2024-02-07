@@ -1,4 +1,4 @@
-package com.example.entity;
+package com.dhulai.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,7 +20,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Data
-@Table(name = "SERVICEWASH")
+@Table(name = "SERVICESWASH")
 public class ServicesWash {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
