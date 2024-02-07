@@ -1,8 +1,8 @@
-package com.example.controller;
+package com.dhulai.controller;
 
 
-import com.example.entity.ServicesWash;
-import com.example.service.LaundryService;
+import com.dhulai.entity.ServicesWash;
+import com.dhulai.service.LaundryService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,20 +17,18 @@ import java.util.List;
 @RequestMapping("/api")
 public class ServicesController {
 
-    private final LaundryService laundryService;
-
     @Autowired
-    public ServicesController(LaundryService laundryService) {
-        this.laundryService = laundryService;
-    }
+    private LaundryService laundryService;
 
     @GetMapping("/getallservices")
     public List<ServicesWash> getAllServices() {
+        System.out.println("getiubihdfg");
         return laundryService.getAllServices();
     }
 
     @GetMapping(value="/hello")
     public ResponseEntity<String> hello() {
+        System.out.println("hello");
        String  response = "Hello, world!";
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
