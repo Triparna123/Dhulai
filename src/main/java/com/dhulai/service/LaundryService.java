@@ -16,6 +16,7 @@ public class LaundryService {
     private ServiceRepository serviceRepository;
 
     public List<ServicesWash> getAllServices() {
+        System.out.println(serviceRepository.findAll());
         return serviceRepository.findAll();
     }
 

@@ -20,7 +20,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Data
-@Table(name = "SERVICEWASH")
+@Table(name = "SERVICESWASH")
 public class ServicesWash {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

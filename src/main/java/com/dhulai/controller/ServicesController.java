@@ -21,16 +21,8 @@ public class ServicesController {
     private LaundryService laundryService;
 
     @GetMapping("/getallservices")
-    public List<ServicesWash> getAllServices() {
-        System.out.println("getiubihdfg");
-        return laundryService.getAllServices();
-    }
-
-    @GetMapping(value="/hello")
-    public ResponseEntity<String> hello() {
-        System.out.println("hello");
-       String  response = "Hello, world!";
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<List<ServicesWash>> getAllServices() {
+        return new ResponseEntity<>(laundryService.getAllServices(),HttpStatus.OK);
     }
     // Add more endpoint methods as needed
 }
