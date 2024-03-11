@@ -27,7 +27,7 @@ import lombok.ToString;
 public class ServicesWash {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="ID")
+    @Column(name="SERVICE_ID")
     private Integer id;
  
     @Column(name="SERVICE_NAME")

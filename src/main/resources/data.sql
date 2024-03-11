@@ -6,8 +6,8 @@ INSERT INTO LAUNDRY_SHOP (
     RATINGS,
     DISTANCE,
     IMAGE_PATH,
-    DESCRIPTION,
-    WORKING_DAYS_AND_TIME
+    DESCRIPTION
+   -- WORKING_DAYS_AND_TIME
 
 ) VALUES (
     1,
@@ -16,10 +16,25 @@ INSERT INTO LAUNDRY_SHOP (
     '4.5',
     2.5,
     '',
-    'Environmentally friendly washing,Dhullai providing people\n oriented excellence service.Care of your clothes and peruse\n coexistence with development.',
-    '{"Monday": "8 AM - 6 PM", "Tuesday": "8 AM - 6 PM"}'
+    'Environmentally friendly washing,Dhullai providing people\n oriented excellence service.Care of your clothes and peruse\n coexistence with development.'
+   -- '{"Monday": "8 AM - 6 PM", "Tuesday": "8 AM - 6 PM"}'
  
 );
+
+
+
+--sesrvice_data.sql
+INSERT INTO SERVICESWASH(SERVICE_ID,SERVICE_NAME,ICON_NAME) VALUES (1,'WASH','wash');
+INSERT INTO SERVICESWASH(SERVICE_ID,SERVICE_NAME,ICON_NAME) VALUES (2,'WASH AND IRON','washAndIron');
+INSERT INTO SERVICESWASH(SERVICE_ID,SERVICE_NAME,ICON_NAME) VALUES (3,'DRY CLEAN','dry clean');
+
+--product_data.sql
+-- Insert data into the PRODUCT table
+INSERT INTO PRODUCT (PRODUCT_ID, PRODUCT_NAME, QUANTITY, PRICE, ORIGINALPRICE, IMAGE_PATH)
+VALUES
+    (1, 'T-Shirt', 50, 5.99, 7.99, ''),
+    (2, 'Jeans', 30, 19.99, 24.99, ''),
+    (3, 'Formal Shirt', 40, 8.99, 10.99, '');
 
 INSERT INTO LAUNDRY_SHOP_SERVICES (SHOP_ID, SERVICE_ID)
 VALUES
@@ -32,17 +47,3 @@ VALUES
     (1, 1),  -- Shop 1 provides product Detergent
     (1, 2),  -- Shop 1 provides product Iron
     (1, 3);
-
---sesrvice_data.sql
-INSERT INTO SERVICESWASH(ID,SERVICE_NAME,ICON_NAME) VALUES (1,'WASH','wash');
-INSERT INTO SERVICESWASH(ID,SERVICE_NAME,ICON_NAME) VALUES (2,'WASH AND IRON','washAndIron');
-INSERT INTO SERVICESWASH(ID,SERVICE_NAME,ICON_NAME) VALUES (3,'DRY CLEAN','dry clean');
-
---product_data.sql
--- Insert data into the PRODUCT table
-INSERT INTO PRODUCT (PRODUCT_ID, PRODUCT_NAME, QUANTITY, PRICE, ORIGINALPRICE, IMAGE_PATH)
-VALUES
-    (1, 'T-Shirt', 50, 5.99, 7.99, ''),
-    (2, 'Jeans', 30, 19.99, 24.99, ''),
-    (3, 'Formal Shirt', 40, 8.99, 10.99, '');
-

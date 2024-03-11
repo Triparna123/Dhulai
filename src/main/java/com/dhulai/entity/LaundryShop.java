@@ -38,11 +38,11 @@ public class LaundryShop {
     private double distance;
     private String imagePath;
     private String description;
-    @ElementCollection
-    @CollectionTable(name = "WORKING_DAYS_AND_TIME", joinColumns = @JoinColumn(name = "SHOP_ID"))
-    @MapKeyColumn(name = "DAY")
-    @Column(name = "TIME")
-    private Map<String, String> workingDaysAndTime;
+    // @ElementCollection
+    // @CollectionTable(name = "WORKING_DAYS_AND_TIME", joinColumns = @JoinColumn(name = "SHOP_ID"))
+    // @MapKeyColumn(name = "DAY")
+    // @Column(name = "TIME")
+    // private Map<String, String> workingDaysAndTime;
     @OneToMany(mappedBy = "laundryShops")
     private List<ServicesWash> services;
     @OneToMany(mappedBy = "laundryShop")
