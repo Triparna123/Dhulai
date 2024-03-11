@@ -1,4 +1,3 @@
---LaundryShop_data.sql
 INSERT INTO LAUNDRY_SHOP (
     SHOP_ID,
     NAME,
@@ -32,17 +31,3 @@ VALUES
     (1, 1),  -- Shop 1 provides product Detergent
     (1, 2),  -- Shop 1 provides product Iron
     (1, 3);
-
---sesrvice_data.sql
-INSERT INTO SERVICESWASH(ID,SERVICE_NAME,ICON_NAME) VALUES (1,'WASH','wash');
-INSERT INTO SERVICESWASH(ID,SERVICE_NAME,ICON_NAME) VALUES (2,'WASH AND IRON','washAndIron');
-INSERT INTO SERVICESWASH(ID,SERVICE_NAME,ICON_NAME) VALUES (3,'DRY CLEAN','dry clean');
-
---product_data.sql
--- Insert data into the PRODUCT table
-INSERT INTO PRODUCT (PRODUCT_ID, PRODUCT_NAME, QUANTITY, PRICE, ORIGINALPRICE, IMAGE_PATH)
-VALUES
-    (1, 'T-Shirt', 50, 5.99, 7.99, ''),
-    (2, 'Jeans', 30, 19.99, 24.99, ''),
-    (3, 'Formal Shirt', 40, 8.99, 10.99, '');
-
