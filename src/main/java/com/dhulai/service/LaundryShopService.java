@@ -10,12 +10,8 @@ import java.util.List;
 @Service
 public class LaundryShopService {
 
-    private final LaundryShopRepository laundryShopRepository;
-
     @Autowired
-    public LaundryShopService(LaundryShopRepository laundryShopRepository) {
-        this.laundryShopRepository = laundryShopRepository;
-    }
+    private LaundryShopRepository laundryShopRepository;
 
     public LaundryShop saveLaundryShop(LaundryShop laundryShop) {
         return laundryShopRepository.save(laundryShop);
@@ -25,7 +21,7 @@ public class LaundryShopService {
         return laundryShopRepository.findAll();
     }
 
-    public LaundryShop getLaundryShopById(int shopId) {
+    public LaundryShop getLaundryShopById(Long shopId) {
         return laundryShopRepository.findById(shopId).orElse(null);
     }
 

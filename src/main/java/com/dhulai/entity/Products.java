@@ -22,25 +22,30 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Data
-@Table(name="PRODUCT")
+@Table(name = "PRODUCT")
 public class Products {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="PRODUCT_ID")
-    private int productId;
-    @Column(name="PRODUCT_NAME")
+    @Column(name = "PRODUCT_ID")
+    private Long productId;
+
+    @Column(name = "PRODUCT_NAME")
     private String productName;
-    @Column(name="QUANTITY")
+
+    @Column(name = "QUANTITY")
     private int quantity;
-    @Column(name="PRICE")
+
+    @Column(name = "PRICE")
     private double price;
-    @Column(name="ORIGINALPRICE")
+
+    @Column(name = "ORIGINALPRICE")
     private double originalPrice;
-    @Column(name="IMAGE_PATH")
+    
+    @Column(name = "IMAGE_PATH")
     private String image;
 
     @ManyToOne
     @JoinColumn(name = "products")
     private LaundryShop laundryShop;
-    
+
 }

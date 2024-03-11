@@ -5,9 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,14 +24,11 @@ import lombok.ToString;
 public class ServicesWash {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="SERVICE_ID")
-    private Integer id;
- 
-    @Column(name="SERVICE_NAME")
+    @Column(name = "SERVICE_ID")
+    private Long id;
+
+    @Column(name = "SERVICE_NAME")
     private String serviceName;
-    @Column(name="ICON_NAME")
+    @Column(name = "ICON_NAME")
     private String iconName;
-    @ManyToOne
-    @JoinColumn(name = "services")
-    private LaundryShop laundryShops;
 }

@@ -14,12 +14,8 @@ import java.util.List;
 @RequestMapping("/api")
 public class LaundryShopController {
 
-    private final LaundryShopService laundryShopService;
-
     @Autowired
-    public LaundryShopController(LaundryShopService laundryShopService) {
-        this.laundryShopService = laundryShopService;
-    }
+    private LaundryShopService laundryShopService;
 
     @PostMapping
     public ResponseEntity<LaundryShop> createLaundryShop(@RequestBody LaundryShop laundryShop) {
@@ -34,7 +30,7 @@ public class LaundryShopController {
     }
 
     @GetMapping("/{shopId}")
-    public ResponseEntity<LaundryShop> getLaundryShopById(@PathVariable int shopId) {
+    public ResponseEntity<LaundryShop> getLaundryShopById(@PathVariable Long shopId) {
         LaundryShop laundryShop = laundryShopService.getLaundryShopById(shopId);
         return laundryShop != null ?
                 new ResponseEntity<>(laundryShop, HttpStatus.OK) :
