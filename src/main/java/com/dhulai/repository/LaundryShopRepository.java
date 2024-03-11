@@ -5,6 +5,6 @@ import com.dhulai.entity.LaundryShop;
 
 
 
-public interface LaundryShopRepository extends JpaRepository<LaundryShop, Integer> {
+public interface LaundryShopRepository extends JpaRepository<LaundryShop, Long> {
    
 }
