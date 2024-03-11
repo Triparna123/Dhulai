@@ -40,6 +40,5 @@ public class LaundryShop {
 
     private String description;
 
-    @OneToMany(mappedBy = "laundryShop")
-    private List<Products> products;
+   
 }

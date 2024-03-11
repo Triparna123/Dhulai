@@ -44,8 +44,6 @@ public class Products {
     @Column(name = "IMAGE_PATH")
     private String image;
 
-    @ManyToOne
-    @JoinColumn(name = "products")
-    private LaundryShop laundryShop;
+   
 
 }
