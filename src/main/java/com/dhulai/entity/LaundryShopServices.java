@@ -21,6 +21,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @IdClass(LaundryShopServicesId.class)
 public class LaundryShopServices {
+
+    
     @Id
     @ManyToOne
     @JoinColumn(name = "SHOP_ID")

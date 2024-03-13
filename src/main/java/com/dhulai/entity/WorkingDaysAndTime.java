@@ -1,6 +1,7 @@
 package com.dhulai.entity;
 
-import jakarta.persistence.Column;
+import java.time.LocalTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,20 +21,13 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Data
-@Table(name = "SERVICESWASH")
-public class ServicesWash {
+public class WorkingDaysAndTime {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "SERVICE_ID")
-    private Long id;
+    private int id;
+    private String day;
+    private LocalTime openTime;
+    private LocalTime closeTime;
 
-    @Column(name = "SERVICE_NAME")
-    private String serviceName;
-    @Column(name = "ICON_NAME")
-    private String iconName;
-
-    public ServicesWash(Long id) {
-        this.id = id;
-    }
 }
-

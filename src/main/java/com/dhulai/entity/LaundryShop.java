@@ -32,7 +32,7 @@ public class LaundryShop {
 
     private String timing;
 
-    private String ratings;
+    private double ratings;
 
     private double distance;
 
