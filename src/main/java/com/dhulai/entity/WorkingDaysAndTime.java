@@ -2,6 +2,7 @@ package com.dhulai.entity;
 
 import java.time.LocalTime;
 
+import com.dhulai.enums.DaysOfWeek;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,5 +37,14 @@ public class WorkingDaysAndTime {
     private LocalTime openTime;
     @Column(name = "CLOSE_TIME")
     private LocalTime closeTime;
+    
+    private Boolean isClosed;
+    
+    public DaysOfWeek getDay(){
+        return DaysOfWeek.valueOf(this.day);
+    }
+    public void  setDay(DaysOfWeek days){
+        this.day=days.toString();
+    }
 
 }
