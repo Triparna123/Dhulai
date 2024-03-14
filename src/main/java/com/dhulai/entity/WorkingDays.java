@@ -1,5 +1,4 @@
 package com.dhulai.entity;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,28 +20,10 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Data
-@Table(name = "PRODUCT")
-public class Products {
+@Table(name = "WORKING_DAYS")
+public class WorkingDays {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "PRODUCT_ID")
-    private Long productId;
-
-    @Column(name = "PRODUCT_NAME")
-    private String productName;
-
-    @Column(name = "QUANTITY")
-    private int quantity;
-
-    @Column(name = "PRICE")
-    private double price;
-
-    @Column(name = "ORIGINALPRICE")
-    private double originalPrice;
-    
-    @Column(name = "IMAGE_PATH")
-    private String image;
-
-   
-
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private int dayId;
+    private String days;
 }

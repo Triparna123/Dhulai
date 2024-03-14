@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.dhulai.entity.LaundryShop;
-import com.dhulai.model.LaundryShopWithServices;
+
 import com.dhulai.service.LaundryShopService;
 
 import java.util.List;
@@ -32,5 +32,5 @@ public class LaundryShopController {
         List<Map<String, Object>> result = laundryShopService.getAllLaundryShopsWithServicesAndProducts();
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-
+ 
 }
