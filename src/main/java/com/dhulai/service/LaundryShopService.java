@@ -6,10 +6,8 @@ import org.springframework.stereotype.Service;
 import com.dhulai.entity.LaundryShop;
 import com.dhulai.entity.LaundryShopProducts;
 import com.dhulai.entity.LaundryShopServices;
-import com.dhulai.entity.LaundryShopWorkingDaysAndTime;
 import com.dhulai.entity.Products;
 import com.dhulai.entity.ServicesWash;
-import com.dhulai.entity.WorkingDaysAndTime;
 import com.dhulai.model.LaundryShopWithProducts;
 import com.dhulai.model.LaundryShopWithServices;
 import com.dhulai.model.LaundryShopWithWorkingDaysAndTime;
@@ -66,7 +64,7 @@ public class LaundryShopService {
                     shopData.put("shop", shop);
                     shopData.put("services", mapShopToModelService(shop).getServices());
                     shopData.put("products", mapShopToModelProducts(shop).getProducts());
-                    shopData.put("workingDaysAndTime", mapShopToModelWorkingDaysAndTime(shop).getWorkingDaysAndTime());
+                    shopData.put("workingDaysAndTime", getAllWorkingDaysofAShop(shop).getWorkingDaysAndTime());
                     return shopData;
                 })
                 .collect(Collectors.toList());
@@ -90,13 +88,17 @@ public class LaundryShopService {
         return new LaundryShopWithProducts(laundryShop, productsList);
     }
 
-    private LaundryShopWithWorkingDaysAndTime mapShopToModelWorkingDaysAndTime(LaundryShop laundryShop) {
-        List<LaundryShopWorkingDaysAndTime> daysAndTimes = workingDaysAndTimeRepository.findByLaundryShop(laundryShop);
-        List<WorkingDaysAndTime> workingDaysList = daysAndTimes.stream()
-                .map(LaundryShopWorkingDaysAndTime::getWorkingDaysAndTime)
-                .collect(Collectors.toList());
+    // private LaundryShopWithWorkingDaysAndTime mapShopToModelWorkingDaysAndTime(LaundryShop laundryShop) {
+    //     List<WorkingDaysAndTime> daysAndTimes = workingDaysAndTimeRepository.findByLaundryShop(laundryShop);
+    //     List<WorkingDaysAndTime> workingDaysList = daysAndTimes.stream()
+    //             .map(WorkingDaysAndTime::getWorkingDaysAndTime)
+    //             .collect(Collectors.toList());
 
-        return new LaundryShopWithWorkingDaysAndTime(laundryShop, workingDaysList);
+    //     return new LaundryShopWithWorkingDaysAndTime(laundryShop, workingDaysList);
+    // }
+
+    private LaundryShopWithWorkingDaysAndTime getAllWorkingDaysofAShop(LaundryShop laundryShop) {
+        return new LaundryShopWithWorkingDaysAndTime(laundryShop, workingDaysAndTimeRepository.findByShopId(laundryShop));
     }
 
 }
