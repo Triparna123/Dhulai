@@ -31,4 +31,9 @@ public class ServicesWash {
     private String serviceName;
     @Column(name = "ICON_NAME")
     private String iconName;
+
+    public ServicesWash(Long id) {
+        this.id = id;
+    }
 }
+
