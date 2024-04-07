@@ -30,7 +30,7 @@ public class LaundryShop {
 
     private String name;
 
-    private String timing;
+    // private String timing;
 
     private double ratings;
 

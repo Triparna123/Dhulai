@@ -8,17 +8,20 @@ import com.dhulai.entity.LaundryShopProducts;
 import com.dhulai.entity.LaundryShopServices;
 import com.dhulai.entity.Products;
 import com.dhulai.entity.ServicesWash;
+import com.dhulai.entity.WorkingDaysAndTime;
 import com.dhulai.model.LaundryShopWithProducts;
 import com.dhulai.model.LaundryShopWithServices;
 import com.dhulai.model.LaundryShopWithWorkingDaysAndTime;
 import com.dhulai.repository.LaundryProductRepository;
 import com.dhulai.repository.LaundryServiceRepository;
 import com.dhulai.repository.LaundryShopRepository;
+import com.dhulai.repository.ProductRepository;
 import com.dhulai.repository.ServiceRepository;
 import com.dhulai.repository.WorkingDaysAndTimeRepository;
 
 import jakarta.transaction.Transactional;
 
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,22 +39,38 @@ public class LaundryShopService {
     @Autowired
     private ServiceRepository serviceRepository;
     @Autowired
+    private ProductRepository productRepository;
+    @Autowired
     private WorkingDaysAndTimeRepository workingDaysAndTimeRepository;
 
-    public LaundryShop saveLaundryShop(LaundryShop laundryShop, List<Long> selectedServiceIds) {
-        LaundryShop savedShop = laundryShopRepository.save(laundryShop);
+    @Transactional
+    public LaundryShop saveShop(LaundryShop laundryShop, LaundryShopWithProducts shopWithProducts,
+            LaundryShopWithServices shopWithServices, LaundryShopWithWorkingDaysAndTime shopWithWorkingDaysAndTime) {
+        // Save shop details
+        LaundryShop shop = laundryShopRepository.save(laundryShop);
 
-        if (selectedServiceIds != null && !selectedServiceIds.isEmpty()) {
-            List<ServicesWash> selectedServices = serviceRepository.findAllById(selectedServiceIds);
-            for (ServicesWash service : selectedServices) {
-                LaundryShopServices shopService = new LaundryShopServices();
-                shopService.setLaundryShop(savedShop);
-                shopService.setServicesWash(service);
-                laundryServiceRepository.save(shopService);
-            }
+        // Save selected services for the shop
+        List<ServicesWash> servicesList = shopWithServices.getServices();
+        for (ServicesWash service : servicesList) {
+            LaundryShopServices shopService = new LaundryShopServices(shop, service);
+            laundryServiceRepository.save(shopService);
         }
 
-        return savedShop;
+        // Save selected products for the shop
+        List<Products> productList = shopWithProducts.getProducts();
+        for (Products product : productList) {
+            LaundryShopProducts shopProduct = new LaundryShopProducts(shop, product);
+            laundryProductRepository.save(shopProduct);
+        }
+
+        // Save working days and times for the shop
+        List<WorkingDaysAndTime> workingDaysAndTime = shopWithWorkingDaysAndTime.getWorkingDaysAndTime();
+        for (WorkingDaysAndTime dayAndTime : workingDaysAndTime) {
+            dayAndTime.setShopId(shop);
+            workingDaysAndTimeRepository.save(dayAndTime);
+        }
+
+        return shop;
     }
 
     @Transactional
@@ -64,12 +83,13 @@ public class LaundryShopService {
                     shopData.put("shop", shop);
                     shopData.put("services", mapShopToModelService(shop).getServices());
                     shopData.put("products", mapShopToModelProducts(shop).getProducts());
-                    shopData.put("workingDaysAndTime", getAllWorkingDaysofAShop(shop).getWorkingDaysAndTime());
+                    shopData.put("workingDaysAndTime",
+                            getAllWorkingDaysofAShop(shop).getWorkingDaysAndTime());
                     return shopData;
                 })
                 .collect(Collectors.toList());
     }
- 
+
     private LaundryShopWithServices mapShopToModelService(LaundryShop laundryShop) {
         List<LaundryShopServices> servicesForShop = laundryServiceRepository.findByLaundryShop(laundryShop);
         List<ServicesWash> servicesList = servicesForShop.stream()
@@ -87,15 +107,6 @@ public class LaundryShopService {
 
         return new LaundryShopWithProducts(laundryShop, productsList);
     }
-
-    // private LaundryShopWithWorkingDaysAndTime mapShopToModelWorkingDaysAndTime(LaundryShop laundryShop) {
-    //     List<WorkingDaysAndTime> daysAndTimes = workingDaysAndTimeRepository.findByLaundryShop(laundryShop);
-    //     List<WorkingDaysAndTime> workingDaysList = daysAndTimes.stream()
-    //             .map(WorkingDaysAndTime::getWorkingDaysAndTime)
-    //             .collect(Collectors.toList());
-
-    //     return new LaundryShopWithWorkingDaysAndTime(laundryShop, workingDaysList);
-    // }
 
     private LaundryShopWithWorkingDaysAndTime getAllWorkingDaysofAShop(LaundryShop laundryShop) {
         return new LaundryShopWithWorkingDaysAndTime(laundryShop, workingDaysAndTimeRepository.findByShopId(laundryShop));

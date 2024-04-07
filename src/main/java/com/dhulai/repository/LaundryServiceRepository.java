@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.dhulai.entity.LaundryShop;
 import com.dhulai.entity.LaundryShopServices;
+import com.dhulai.entity.ServicesWash;
 import com.dhulai.model.LaundryShopServicesId;
 
 
@@ -16,6 +17,8 @@ import com.dhulai.model.LaundryShopServicesId;
 public interface LaundryServiceRepository extends JpaRepository<LaundryShopServices, LaundryShopServicesId> {
     // Add custom queries if needed
     List<LaundryShopServices> findByLaundryShop(LaundryShop laundryShop);
+    LaundryShopServices findByLaundryShopAndServicesWash(LaundryShop laundryShop, ServicesWash servicesWash); // Add this line
+
     
 }
 
