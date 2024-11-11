@@ -1,5 +1,6 @@
 package com.dhulai.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.dhulai.entity.LaundryShop;
@@ -17,5 +18,9 @@ import lombok.Setter;
 public class LaundryShopWithServices {
     private LaundryShop laundryShop;
     private List<ServicesWash> services;
+
+       
+
+    
 
 }

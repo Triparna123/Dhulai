@@ -30,15 +30,10 @@ public class LaundryShop {
 
     private String name;
 
-    // private String timing;
+    private String address;
 
-    private double ratings;
+    
 
-    private double distance;
-
-    private String imagePath;
-
-    private String description;
 
    
 }

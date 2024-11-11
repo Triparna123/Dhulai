@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.dhulai.entity.LaundryShop;
 import com.dhulai.enums.DaysOfWeek;
+import com.dhulai.model.LaundryShopRequest;
 import com.dhulai.model.LaundryShopWithProducts;
 import com.dhulai.model.LaundryShopWithServices;
 import com.dhulai.model.LaundryShopWithWorkingDaysAndTime;
@@ -30,29 +31,21 @@ public class LaundryShopController {
         return ResponseEntity.ok(days);
     }
 
-    @PostMapping("/savelaundryshop")
-    public ResponseEntity<?> saveLaundryShop(@RequestBody LaundryShop laundryShop,
-            @RequestBody LaundryShopWithProducts shopWithProducts,
-            @RequestBody LaundryShopWithServices shopWithServices,
-            @RequestBody LaundryShopWithWorkingDaysAndTime shopWithWorkingDaysAndTime) {
-        try {
-            // Save the shop and associated details using LaundryShopService
-            LaundryShop savedShop = laundryShopService.saveShop(
-                    laundryShop,
-                    shopWithProducts,
-                    shopWithServices,
-                    shopWithWorkingDaysAndTime);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedShop);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error occurred while registering the laundry shop");
-        }
+    @PostMapping("/register")
+    public ResponseEntity<LaundryShopWithServices> registerLaundryShop(@RequestBody LaundryShopWithServices laundryShopWithServices) {
+        LaundryShopWithServices registeredShop = laundryShopService.registerLaundryShopWithServices(laundryShopWithServices);
+        return ResponseEntity.status(HttpStatus.CREATED).body(registeredShop);
     }
 
-    @GetMapping("/getalllaundryshops")
-    public ResponseEntity<List<Map<String, Object>>> getAllLaundryShopsWithServicesAndProducts() {
-        List<Map<String, Object>> result = laundryShopService.getAllLaundryShopsWithServicesAndProducts();
-        return new ResponseEntity<>(result, HttpStatus.OK);
+    @GetMapping("/shopsWithServices")
+    public List<LaundryShopWithServices> getShopsWithServices() {
+        return laundryShopService.getShopsWithServices();
     }
+
+    // @GetMapping("/getalllaundryshops")
+    // public ResponseEntity<List<Map<String, Object>>> getAllLaundryShopsWithServicesAndProducts() {
+    //     List<Map<String, Object>> result = laundryShopService.getAllLaundryShopsWithServicesAndProducts();
+    //     return new ResponseEntity<>(result, HttpStatus.OK);
+    // }
 
 }
