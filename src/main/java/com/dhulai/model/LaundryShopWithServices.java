@@ -19,7 +19,11 @@ public class LaundryShopWithServices {
     private LaundryShop laundryShop;
     private List<ServicesWash> services;
 
-       
+        public LaundryShopWithServices(LaundryShop laundryShop, ServicesWash service) {
+        this.laundryShop = laundryShop;
+        this.services = new ArrayList<>();
+        this.services.add(service); // Add the service to the list
+    }
 
     
 
