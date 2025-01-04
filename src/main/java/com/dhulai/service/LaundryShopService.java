@@ -1,32 +1,33 @@
 package com.dhulai.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.dhulai.entity.LaundryShop;
-import com.dhulai.entity.LaundryShopProducts;
-import com.dhulai.entity.LaundryShopServices;
-import com.dhulai.entity.Products;
-import com.dhulai.entity.ServicesWash;
-import com.dhulai.entity.WorkingDaysAndTime;
-import com.dhulai.model.LaundryShopWithProducts;
-import com.dhulai.model.LaundryShopWithServices;
-import com.dhulai.model.LaundryShopWithWorkingDaysAndTime;
-import com.dhulai.repository.LaundryProductRepository;
-import com.dhulai.repository.LaundryServiceRepository;
-import com.dhulai.repository.LaundryShopRepository;
-import com.dhulai.repository.ProductRepository;
-import com.dhulai.repository.ServiceRepository;
-import com.dhulai.repository.WorkingDaysAndTimeRepository;
-
-import jakarta.transaction.Transactional;
-
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.dhulai.entity.LaundryShop;
+import com.dhulai.entity.LaundryShopServices;
+import com.dhulai.entity.LaundryShopWorkingTime;
+import com.dhulai.entity.ServicesWash;
+import com.dhulai.entity.ShopAdditionalDetails;
+import com.dhulai.entity.ShopWithAdditionalDetails;
+import com.dhulai.entity.WorkingDaysAndTime;
+import com.dhulai.model.LaundryShopRequest;
+import com.dhulai.model.LaundryShopWithServices;
+import com.dhulai.repository.LaundryServiceRepository;
+import com.dhulai.repository.LaundryShopRepository;
+import com.dhulai.repository.LaundryShopWorkingTimeRepository;
+import com.dhulai.repository.ServiceRepository;
+import com.dhulai.repository.ShopAdditionalDetailRepo;
+import com.dhulai.repository.ShopWithAdditionalDetailRepo;
+import com.dhulai.repository.WorkingDaysAndTimeRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class LaundryShopService {
@@ -36,111 +37,122 @@ public class LaundryShopService {
 
     @Autowired
     private LaundryServiceRepository laundryServiceRepository;
-    @Autowired
-    private LaundryProductRepository laundryProductRepository;
+
     @Autowired
     private ServiceRepository serviceRepository;
+
     @Autowired
-    private ProductRepository productRepository;
+    private ShopAdditionalDetailRepo shopAdditionalDetailRepo;
+    @Autowired
+    private ShopWithAdditionalDetailRepo shopWithAdditionalDetailRepo;
+
+    @Autowired
+    private LaundryShopWorkingTimeRepository laundryShopWorkingTimeRepository;
+
     @Autowired
     private WorkingDaysAndTimeRepository workingDaysAndTimeRepository;
 
-    // @Transactional
-    // public LaundryShop saveShop(LaundryShop laundryShop, LaundryShopWithProducts
-    // shopWithProducts,
-    // LaundryShopWithServices shopWithServices, LaundryShopWithWorkingDaysAndTime
-    // shopWithWorkingDaysAndTime) {
-    // // Save shop details
-    // LaundryShop shop = laundryShopRepository.save(laundryShop);
-
-    // // Save selected services for the shop
-    // List<ServicesWash> servicesList = shopWithServices.getServices();
-    // for (ServicesWash service : servicesList) {
-    // LaundryShopServices shopService = new LaundryShopServices(shop, service);
-    // laundryServiceRepository.save(shopService);
-    // }
-
-    // // Save selected products for the shop
-    // List<Products> productList = shopWithProducts.getProducts();
-    // for (Products product : productList) {
-    // LaundryShopProducts shopProduct = new LaundryShopProducts(shop, product);
-    // laundryProductRepository.save(shopProduct);
-    // }
-
-    // // Save working days and times for the shop
-    // List<WorkingDaysAndTime> workingDaysAndTime =
-    // shopWithWorkingDaysAndTime.getWorkingDaysAndTime();
-    // for (WorkingDaysAndTime dayAndTime : workingDaysAndTime) {
-    // dayAndTime.setShopId(shop);
-    // workingDaysAndTimeRepository.save(dayAndTime);
-    // }
-
-    // return shop;
-    // }
     @Transactional
     public LaundryShopWithServices registerLaundryShopWithServices(LaundryShopWithServices laundryShopWithServices) {
-        // Save the LaundryShop to the database
         LaundryShop savedShop = laundryShopRepository.save(laundryShopWithServices.getLaundryShop());
 
-        // Save each service in the list of services if it is not null
         List<ServicesWash> savedServices = new ArrayList<>();
         if (laundryShopWithServices.getServices() != null) {
             for (ServicesWash service : laundryShopWithServices.getServices()) {
                 ServicesWash savedService = serviceRepository.save(service);
                 savedServices.add(savedService);
 
-                // Map the service to the laundry shop in the join table
                 LaundryShopServices laundryShopServices = new LaundryShopServices(savedShop, savedService);
                 laundryServiceRepository.save(laundryShopServices);
             }
         }
 
-        // Return the saved shop with the services attached
         return new LaundryShopWithServices(savedShop, savedServices);
     }
 
-    public List<LaundryShopWithServices> getShopsWithServices() {
-        return laundryShopRepository.findShopsWithServices();
+    @Transactional
+    public LaundryShop addAdditionalDetailsToShop(String shopName, LaundryShopRequest laundryShopRequest) {
+    
+        // Step 1: Fetch the LaundryShop entity using the shop name
+        LaundryShop laundryShop = laundryShopRepository.findByName(shopName)
+                .orElseThrow(() -> new RuntimeException(
+                        "Laundry shop not found with name: " + shopName));
+    
+        // Step 2: Add or Update Shop Additional Details (Description and Ratings)
+        ShopAdditionalDetails shopAdditionalDetails = laundryShopRequest.getShopAdditionalDetails();
+        if (shopAdditionalDetails != null) {
+            shopAdditionalDetails = shopAdditionalDetailRepo.save(shopAdditionalDetails);
+    
+            ShopWithAdditionalDetails shopWithAdditionalDetails = new ShopWithAdditionalDetails();
+            shopWithAdditionalDetails.setLaundryShop(laundryShop);
+            shopWithAdditionalDetails.setAdditionalDetails(shopAdditionalDetails);
+    
+            shopWithAdditionalDetailRepo.save(shopWithAdditionalDetails);
+        }
+    
+        // Step 3: Add or Update Working Days and Times
+        List<WorkingDaysAndTime> workingDaysAndTimes = laundryShopRequest.getWorkingDaysAndTimes();
+        if (workingDaysAndTimes != null && !workingDaysAndTimes.isEmpty()) {
+            for (WorkingDaysAndTime workingDayTime : workingDaysAndTimes) {
+                workingDaysAndTimeRepository.save(workingDayTime);
+    
+                // Create the relationship between LaundryShop and WorkingDaysAndTime
+                LaundryShopWorkingTime laundryShopWorkingTime = new LaundryShopWorkingTime();
+                laundryShopWorkingTime.setLaundryShop(laundryShop);
+                laundryShopWorkingTime.setWorkingDaysAndTime(workingDayTime);
+    
+                laundryShopWorkingTimeRepository.save(laundryShopWorkingTime);
+            }
+        }
+    
+        // Return the updated LaundryShop with additional details and working times
+        return laundryShop;
     }
+    
 
-    // @Transactional
-    // public List<Map<String, Object>> getAllLaundryShopsWithServicesAndProducts() {
-    //     List<LaundryShop> allLaundryShops = laundryShopRepository.findAll();
+    public List<Map<String, Object>> getAllLaundryShops() {
+        List<LaundryShop> shops = laundryShopRepository.findAll();
+        
+        return shops.stream().map(shop -> {
+            Map<String, Object> shopData = new HashMap<>();
+            shopData.put("shopId", shop.getShopId());
+            shopData.put("name", shop.getName());
+            shopData.put("address", shop.getAddress());
 
-    //     return allLaundryShops.stream()
-    //             .map(shop -> {
-    //                 Map<String, Object> shopData = new HashMap<>();
-    //                 shopData.put("shop", shop);
-    //                 shopData.put("services", mapShopToModelService(shop).getServices());
-    //                 shopData.put("products", mapShopToModelProducts(shop).getProducts());
-    //                 shopData.put("workingDaysAndTime",
-    //                         getAllWorkingDaysofAShop(shop).getWorkingDaysAndTime());
-    //                 return shopData;
-    //             })
-    //             .collect(Collectors.toList());
-    // }
-
-    // private LaundryShopWithServices mapShopToModelService(LaundryShop laundryShop) {
-    //     List<LaundryShopServices> servicesForShop = laundryServiceRepository.findByLaundryShop(laundryShop);
-    //     List<ServicesWash> servicesList = servicesForShop.stream()
-    //             .map(LaundryShopServices::getServicesWash)
-    //             .collect(Collectors.toList());
-
-    //     return new LaundryShopWithServices(laundryShop, servicesList);
-    // }
-
-    private LaundryShopWithProducts mapShopToModelProducts(LaundryShop laundryShop) {
-        List<LaundryShopProducts> productsForShop = laundryProductRepository.findByLaundryShop(laundryShop);
-        List<Products> productsList = productsForShop.stream()
-                .map(LaundryShopProducts::getProducts)
+            // Fetch Services
+            List<String> services = laundryShopServicesRepository.findByLaundryShop(shop).stream()
+                .map(service -> service.getServicesWash().getServiceName())
                 .collect(Collectors.toList());
+            shopData.put("services", services);
 
-        return new LaundryShopWithProducts(laundryShop, productsList);
+            // Fetch Working Hours
+            List<String> workingHours = laundryShopWorkingTimeRepository.findByLaundryShop(shop).stream()
+                .map(wt -> wt.getWorkingDaysAndTime().getDay() + ": " + wt.getWorkingDaysAndTime().getOpenTime() + " - " + wt.getWorkingDaysAndTime().getCloseTime())
+                .collect(Collectors.toList());
+            shopData.put("workingHours", workingHours);
+
+            // Fetch Additional Details (Description, Ratings)
+            List<String> additionalDetails = shopWithAdditionalDetailsRepository.findByLaundryShop(shop).stream()
+                .map(details -> details.getAdditionalDetails().getDescription())
+                .collect(Collectors.toList());
+            shopData.put("additionalDetails", additionalDetails);
+
+            return shopData;
+        }).collect(Collectors.toList());
     }
 
-    private LaundryShopWithWorkingDaysAndTime getAllWorkingDaysofAShop(LaundryShop laundryShop) {
-        return new LaundryShopWithWorkingDaysAndTime(laundryShop,
-                workingDaysAndTimeRepository.findByShopId(laundryShop));
+    public List<ServicesWash> getServicesByShopName(String shopName) {
+        return laundryShopRepository.findServicesByShopName(shopName);
     }
 
+    public LaundryShopWithServices getShopDetailsByName(String shopName) {
+        LaundryShop laundryShop = laundryShopRepository.findByName(shopName)
+                .orElseThrow(() -> new RuntimeException("Shop not found with name: " + shopName));
+    
+        List<ServicesWash> services = serviceRepository.findServicesByShopName(shopName);
+    
+        // Return the shop with the associated services
+        return new LaundryShopWithServices(laundryShop, services);
+    }
+    
 }

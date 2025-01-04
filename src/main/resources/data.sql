@@ -99,6 +99,8 @@ INSERT INTO LAUNDRY_SHOP_SERVICES (
     1,
     2
 );
+-- Link the shop to the services
+
 
 -- INSERT INTO laundry_shop_service_summary (shop_id, shop_name, shop_address, services_list) 
 -- SELECT 

@@ -103,3 +103,4 @@ CREATE TABLE IF NOT EXISTS laundry_shop_services (
 --     shop_address VARCHAR(255) NOT NULL,
 --     services_list VARCHAR(1000)  -- To store comma-separated services
 -- );
+
